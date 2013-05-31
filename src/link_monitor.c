@@ -36,7 +36,8 @@ void link_monitor_handle_failure(int error)
 			text_layer_set_text(&date_layer, itoa(error));
 #endif
 	}
-	
+
+#ifdef VIBRATE_ON_LINK_LOST	
 	if(__linkStatus == LinkStatusOK)
 	{
 		//The link has just failed, notify the user
@@ -49,17 +50,20 @@ void link_monitor_handle_failure(int error)
 	
 		vibes_enqueue_custom_pattern(pat);
 	}
+#endif
 	
 	__linkStatus = LinkStatusFailed;
 }
 
 void link_monitor_handle_success()
 {
+#ifdef VIBRATE_ON_LINK_LOST
 	if(__linkStatus == LinkStatusFailed)
 	{
 		//Notify the user of reconnection
 		vibes_short_pulse();
 	}
+#endif
 	
 	__linkStatus = LinkStatusOK;
 }
